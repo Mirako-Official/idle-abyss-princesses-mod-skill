@@ -1,0 +1,10 @@
+{
+  "name": "iap-hero-mod",
+  "version": "1.0.0",
+  "description": "Make a complete custom hero mod for the Steam game Idle Abyss Princesses (深渊放置姬): design, portrait and expressions, chibi battle sprites, 16x16 icons, hero.js, translations, hero-lab balance, optional AI chat and Workshop upload. Image models are the player's choice.",
+  "author": { "name": "Mirako", "url": "https://github.com/Mirako-Official" },
+  "homepage": "https://github.com/Mirako-Official/idle-abyss-princesses-mod-skill",
+  "repository": "https://github.com/Mirako-Official/idle-abyss-princesses-mod-skill",
+  "license": "MIT",
+  "keywords": ["idle-abyss-princesses", "深渊放置姬", "game-mod", "steam-workshop", "hero", "chibi", "pixel-art"]
+}
