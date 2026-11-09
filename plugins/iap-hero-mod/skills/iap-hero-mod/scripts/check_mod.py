@@ -122,6 +122,11 @@ def check_code(mod, mid):
     if (mod / 'art_icons.js').exists() and 'MOD.shared.itemArt' not in src: say('WARN', 'art_icons.js exists but hero.js does not use itemArt: MOD.shared.itemArt')
     if re.search(r'^(?:if\s*\(.*\bVFX\b.*\)\s*)?VFX\.[A-Za-z_$][\w$]*\s*=', src, re.M):      # column 0 = top level of the script
         say('WARN', 'hero.js assigns VFX.<kind> at the top level: mod scripts run before the game scripts, so VFX does not exist yet. Register it inside IAP.onReady or when first used')
+    if re.search(r'(?<![\w.])H[XY]\s*(?:[-+*/]?=)(?!=)', src):
+        say('WARN', 'hero.js assigns HX / HY: the hero teleports with no movement. Use c.dash / c.blink (game 3.1.1+, references/hero-code.md 4)')
+    if re.search(r'\bform\s*:\s*\{', src):
+        if not re.search(r'\bwhen\s*:', src): say('ERROR', 'sprite.form needs when: h => …; without it the whole mod fails to load (references/transform.md)')
+        say('WARN', 'sprite.form needs game 3.1.1+ (older games drop it when sprite.base is used): say so in the description')
 
 
 def check_files(mod):

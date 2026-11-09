@@ -28,7 +28,8 @@ Ask in one message, offer defaults, and do not block on details you can decide l
    providers `scripts/gen_image.py` supports (openai-compatible, novelai, sdwebui). Which assets:
    portrait (needed), expressions (optional), outfit tiers (optional), chibi (recommended).
    Read `references/image-providers.md` before using any provider.
-3. **Gameplay idea**: melee or ranged, main stat, element, a resource or gimmick, skills, three routes.
+3. **Gameplay idea**: melee or ranged, main stat, element, a resource or gimmick (a transformation
+   like the Dragon Princess's dragon form? dashes and leaps?), skills, three routes.
 4. **Languages**: Chinese is the source language of the game; at least English is strongly advised;
    Japanese, Korean and Traditional Chinese are supported.
 5. **Optional AI chat** with the hero through the player's own AI key (needs game 3.0.2+ desktop).
@@ -104,6 +105,9 @@ patterns, and the traps that do not throw errors). Key points:
 - `itemArt: MOD.shared.itemArt`, `face: [x, y]`, `bio` with the art credits, voice `lines`
 - nothing at the top level of a script may touch game UI or renderer globals: they do not exist
   yet when mod scripts run (use `IAP.onReady` or register lazily)
+- dashes, charges and leaps: `c.dash` / `c.blink` (`references/hero-code.md` 4), never write `HX` / `HY`
+- a transformation (a timed form with its own numbers and sprite, like the dragon): follow
+  `references/transform.md`; draw a form sprite with `scripts/form_sprite.py` or borrow the dragon
 
 ## 7. Translate
 
@@ -165,3 +169,6 @@ expression, a fixed translation) then takes minutes.
   (the export script handles it).
 - Image model edits drift: composite only the face back, and compare all frames side by side.
 - Mods cannot use the network; the only exception is the player's own AI service through `IAP.ai`.
+- Writing `HX` / `HY` teleports the hero with no movement; `c.dash` moves it over time and can hit
+  everything on the way (game 3.1.1+).
+- A transforming hero needs the uptime in `estimate`, or the lab shows a big panel error.

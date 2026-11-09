@@ -10,7 +10,7 @@ hero lab, and the traps that do not show up as errors.
 1. How mod scripts run
 2. File layout and the balance table
 3. Required shape (fields, ids, talents)
-4. Patterns: resource, damage hooks, skills, pets, cast lock, delayed hits, text, VFX
+4. Patterns: resource, damage hooks, skills, movement, transformation, pets, cast lock, delayed hits, text, VFX
 5. Panel estimate (`estimate`)
 6. Items: legendaries, sets, court, icons
 7. Pitfalls checklist
@@ -94,6 +94,34 @@ Return `false` when there is nothing to do (no target) so the cooldown is not sp
 Skill `mul: k => ...` multiplies that skill's damage in both combat and the panel (use it for 6-piece
 set multipliers and legendaries, not a global damage stat).
 
+**Movement (dash, charge, blink; game 3.1.1+)**: never write `HX` / `HY` yourself (the hero
+teleports with no movement and move-based effects miss it). Use the skill context:
+```js
+mh_rush: { n: '突进', lv: 6, cd: 7, desc: `冲向最远的敌人，沿途造成 ${pv(MH_BAL.rush.pass * 100)}% 伤害，到达后再造成 ${pv(MH_BAL.rush.coef * 100)}% 伤害。`,
+  cast(c) {
+    const far = c.mons.slice().sort((a, b) => Math.hypot(b.gx - c.hx, b.gy - c.hy) - Math.hypot(a.gx - c.hx, a.gy - c.hy))[0];
+    if (!far) return false;
+    return c.dash(far, { dur: .22, col: '#b48cff',
+      pass: m => hit(m, MH_BAL.rush.pass, 'ww', { sk: c.id }),                 // every enemy on the way, once
+      end: () => { if (!far.dead) hit(far, MH_BAL.rush.coef, 'ww', { sk: c.id }); } });   // on arrival
+  } },
+```
+- `c.dash(target, opts)`: `target` is a monster (stops 0.9 tiles in front of it, bosses 1.4) or
+  `[gx, gy]` in grid tiles (the field is 12×12). Returns `false` when it did not move (too close,
+  dead, already dashing): return that from `cast` so the cooldown is not spent.
+  Options: `dur` seconds (or `speed` tiles/s, default 18), `stop`, `inv` (invulnerable while
+  dashing), `lock: false` (keep attacking and casting; by default the dash locks like a cast),
+  `col` (trail colour), `pass(m)` with `width` (default 0.6 tiles), `end()` (not called when the dash
+  is interrupted by death, a stage change or entering / leaving a rift or raid).
+- `c.blink(target, { stop, col })` teleports with an after-image (what the official heroes' leaps use).
+- `c.hx` / `c.hy` are the hero's grid position, `c.dashing` is true during a dash.
+- Hooks without a target (`update(c, dt)`, `onKill`, …) use the globals `heroDash(gx, gy, opts)` and
+  `heroBlink(gx, gy, col)` with coordinates you compute (`HX` / `HY` are fine to read).
+- Enemies are moved by ground zones with `pull` (tiles per second towards the centre; HEROES.md).
+
+**Transformation** (like the Dragon Princess's dragon form; game 3.1.1+): a timed `R.hero` state, the
+damage hooks and `sprite.form`. Read `references/transform.md`.
+
 **Cast lock**: `c.h.ww = seconds` stops basic attacks and other skills for that long (wind-up,
 channel, a nap). It is deterministic and the panel can model it.
 
@@ -167,5 +195,7 @@ average, resource level on average. If a mechanic multiplies damage in combat (r
 - [ ] Every description built from the balance table; i18n keys match the rendered sentences
       (`i18n_dump.js`).
 - [ ] No `Math.random` in VFX code; no saved-data reads in hit hooks.
+- [ ] Dashes and leaps use `c.dash` / `c.blink`, never assignments to `HX` / `HY`.
+- [ ] A transforming hero follows the checklist in `references/transform.md`.
 - [ ] `mod.json` names ≤ 40 and descriptions ≤ 300 characters per language (the game cuts them).
 - [ ] `python scripts/check_mod.py mod` shows no ERROR.
