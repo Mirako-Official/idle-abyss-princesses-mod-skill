@@ -1,13 +1,13 @@
 {
   "name": "mirako-iap",
   "owner": { "name": "Mirako", "url": "https://github.com/Mirako-Official" },
-  "metadata": { "description": "Skills for making mods for Idle Abyss Princesses (深渊放置姬)", "version": "1.1.0" },
+  "metadata": { "description": "Skills for making mods for Idle Abyss Princesses (深渊放置姬)", "version": "1.2.0" },
   "plugins": [
     {
       "name": "iap-hero-mod",
       "source": "./plugins/iap-hero-mod",
       "description": "Make a complete custom hero mod for Idle Abyss Princesses and get it ready for the Steam Workshop.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "game-modding",
       "keywords": ["idle-abyss-princesses", "深渊放置姬", "game-mod", "steam-workshop"]
     }

@@ -1,6 +1,6 @@
 ---
 name: iap-hero-mod
-description: Make a complete custom hero (角色) mod for the Steam game 深渊放置姬 / Idle Abyss Princesses and get it ready for the Steam Workshop — character design, portrait and expression art, Q 版 chibi battle sprites, 16×16 item and skill icons, hero.js (skills, talents, three routes with sets and legendaries, court items), translations, balance in the in-game 角色实验室 hero lab, an optional chat-with-the-hero feature through the player's own AI service (IAP.ai), and the Workshop upload. The player chooses how art is made (their own drawings, an OpenAI-compatible image API, NovelAI, local Stable Diffusion, or another tool). Use this skill whenever someone wants to create, port, fix or finish a hero / character mod, 角色模组, 自定义角色, 工坊角色, OC or fan character for Idle Abyss Princesses — even if they only ask about one piece, such as chibi sprites for their mod, a pixelated mod portrait, mod translations, a hero failing the lab, or uploading a hero to the Workshop.
+description: Make a complete custom hero (角色) mod for the Steam game 深渊放置姬 / Idle Abyss Princesses and get it ready for the Steam Workshop — character design, portrait and expression art, Q 版 chibi battle sprites, 16×16 item and skill icons, hero.js (skill design, legendary and set effect design, talents, three routes, court items), skill effects (VFX) with an out-of-game preview and pixelfx sprite sheets, translations, balance in the in-game 角色实验室 hero lab, an optional chat-with-the-hero feature through the player's own AI service (IAP.ai), and the Workshop upload. The player chooses how art is made (their own drawings, an OpenAI-compatible image API, NovelAI, local Stable Diffusion, or another tool). Use this skill whenever someone wants to create, port, fix or finish a hero / character mod, 角色模组, 自定义角色, 工坊角色, OC or fan character for Idle Abyss Princesses — even if they only ask about one piece, such as chibi sprites for their mod, a pixelated mod portrait, mod translations, a hero failing the lab, designing skills or legendary effects, making skill effects look better, or uploading a hero to the Workshop.
 ---
 
 # Idle Abyss Princesses: custom hero mod
@@ -11,7 +11,8 @@ You are helping a player turn a character into a playable hero mod: a folder the
 hero, translations, a lab-tested balance, and a Workshop preview.
 
 **Running the scripts.** Below, `$SKILL` is this skill's folder (the one containing this SKILL.md).
-The scripts need Python 3 with `pip install pillow numpy`. Run them from the player's work folder
+The scripts need Python 3 with `pip install pillow numpy` (`vfx_preview.py` also needs `pip install playwright`
+and `python -m playwright install chromium`). Run them from the player's work folder
 with full paths, e.g. `python $SKILL/scripts/check_mod.py mod`; each one prints its usage with `--help`.
 
 The game ships its own authoritative modding docs (the **Author Kit**). Read them for API details of
@@ -80,6 +81,13 @@ Fill `DESIGN.md` with the player: identity, resource, six skills, three routes (
 set and two route legendaries in different slots), court items, voice lines, art plan. Make the
 personality do the work: the skills, item flavour lines and voice lines are where a character
 becomes fun. Agree on the design before writing code; it is much cheaper to change here.
+- Skills: read `references/skill-design.md` (the six-skill kit, official cooldowns and damage ranges,
+  building blocks, routes).
+- Legendaries and sets: read `references/item-effects.md` (seven legendary patterns with official
+  examples, which hook for which trigger, typical numbers, 2/4/6-piece sets, estimate).
+- Effects: one line of art direction per skill in DESIGN.md (`references/skill-vfx.md`).
+- `examples/stella/` is a complete example hero where each skill and each legendary is one pattern,
+  tested in the game. Copy from it.
 
 ## 5. Make the art
 
@@ -108,6 +116,10 @@ patterns, and the traps that do not throw errors). Key points:
 - dashes, charges and leaps: `c.dash` / `c.blink` (`references/hero-code.md` 4), never write `HX` / `HY`
 - a transformation (a timed form with its own numbers and sprite, like the dragon): follow
   `references/transform.md`; draw a form sprite with `scripts/form_sprite.py` or borrow the dragon
+- signature effects: `references/skill-vfx.md`. Draft, then look at each skill with
+  `scripts/vfx_preview.py` (contact sheet + GIF from the installed game, `--ref hero:skill` puts an
+  official skill next to it) and fix the worst thing, three rounds at least. Ready-made pixel art
+  effects: pixelfx (https://github.com/patch-gg/pixelfx, MIT) → `scripts/sheet_pack.py`; credit it.
 
 ## 7. Translate
 
@@ -172,3 +184,7 @@ expression, a fixed translation) then takes minutes.
 - Writing `HX` / `HY` teleports the hero with no movement; `c.dash` moves it over time and can hit
   everything on the way (game 3.1.1+).
 - A transforming hero needs the uptime in `estimate`, or the lab shows a big panel error.
+- Effects that throw are silently dropped in the game, and `Math.random` in effect code changes combat:
+  `vfx_preview.py`'s report catches both.
+- Effect kinds registered at the top level of a script never exist (VFX is not defined yet): use
+  `IAP.onReady`.

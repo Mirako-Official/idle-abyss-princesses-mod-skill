@@ -1,0 +1,12 @@
+{
+  "id": "stella",
+  "name": { "zh": "星术师·星缀（技能书示例）", "en": "Star Mage Stella (skill example)" },
+  "version": "1.0.0",
+  "api": 3,
+  "author": "Idle Abyss Princesses",
+  "description": {
+    "zh": "iap-hero-mod 技能书的示例角色：每个技能、每件传奇都是一种常用写法，另有自定义特效和 pixelfx 精灵图表特效。爆炸特效来自 pixelfx（MIT，github.com/patch-gg/pixelfx）。",
+    "en": "Example hero of the iap-hero-mod skill: each skill and legendary shows one common pattern, plus custom effects and a pixelfx sprite sheet. Explosion from pixelfx (MIT, github.com/patch-gg/pixelfx)."
+  },
+  "scripts": ["fx/sheets.js", "fx.js", "hero.js"]
+}

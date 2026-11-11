@@ -20,19 +20,21 @@
 <Name, range, how it fills and drains, what it does. Shown with resource(h, st) → { v, max, c, label }; pick a mid-tone colour so the white label stays readable.>
 
 ## 3. Skills (6)
-| id | name | unlock lv | what it does | tags |
-|---|---|---|---|---|
-| `<x>_a` | | 1 | | skill |
-| … | | | | |
+Jobs by unlock level (references/skill-design.md): 1 bread and butter · 8 second damage, other shape · 18 buff / summon / zone · 30 signature · 42 defence / buff · 50 ultimate.
+| id | name | unlock lv | job and shape | what it does | cd | tags | effect, one line of art direction |
+|---|---|---|---|---|---|---|---|
+| `<x>_a` | | 1 | area, farming | | 6 | skill | |
+| … | | | | | | | |
 Numbers live in one `<X>_BAL` table; descriptions are built from it.
 
 ## 4. Passive
 <a.lifePct, a.dmgRed, ... — small, flavourful.>
 
 ## 5. Three routes (talent trees)
-| Route | `route` | skills | set (7 pieces, 2 / 4 / 6 bonuses) | two route legendaries (different slots) |
-|---|---|---|---|---|
-| | | 3 skills | name, piece names; 6-piece = ×mul on the route's main damage | slot + effect, slot + effect |
+| Route | `route` | idea in one line | skills | set (2 stats / 4 mechanic / 6 ×mul on two skills) | two route legendaries (slot, pattern A–G, effect) |
+|---|---|---|---|---|---|
+| | | | 3 skills | name, piece names, bonuses | slot + pattern + effect, slot + pattern + effect |
+Legendary patterns (references/item-effects.md): A changes a skill · B skill numbers · C proc · D condition · E stacks · F periodic · G defence.
 The hero lab needs, per route: a set with at least 6 pieces and two route legendaries in different slots without `minStage`.
 
 ## 6. Court (王庭) items

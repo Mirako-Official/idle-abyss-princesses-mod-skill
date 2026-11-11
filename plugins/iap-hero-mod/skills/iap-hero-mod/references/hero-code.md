@@ -157,7 +157,8 @@ function say(s, col, m) { if (R.quiet) return; sayKind(); vfx('mh_say', { s, c: 
 if the jokes matter. `TZ()` translates the text with your i18n entries.
 
 **Skill VFX**: `vfx: { mh_strike: () => { const m = vNear(), at = vAt(m); vfx('arc', { ...at, r: 18, c: '#b070ff', d: .3 }); } }`.
-Kinds and parameters: MODDING 3.9 and the official calls in the kit.
+Kinds and parameters, your own kinds, the preview script and pixelfx sprite sheets: `references/skill-vfx.md`.
+Designing the skills themselves: `references/skill-design.md`; legendaries and sets: `references/item-effects.md`.
 
 ## 5. Panel estimate
 
